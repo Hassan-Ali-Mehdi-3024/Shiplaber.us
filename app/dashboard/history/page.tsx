@@ -137,7 +137,7 @@ export default function HistoryPage() {
   // Load transactions on initial render
   useEffect(() => {
     loadTransactions(1);
-  }, []);
+  }, [loadTransactions]);
   
   // Handle page change
   const handlePageChange = (page: number) => {

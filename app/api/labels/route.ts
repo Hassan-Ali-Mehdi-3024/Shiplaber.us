@@ -38,13 +38,13 @@ export async function GET(req: Request) {
           });
           
           if (!user || user.creatorId !== session.id) {
-            return Response.json({ error: "You don't have permission to view this user's labels" }, { status: 403 });
+            return Response.json({ error: "You don&apos;t have permission to view this user&apos;s labels" }, { status: 403 });
           }
           
           where.userId = userId;
         } else {
           // Regular users can only view their own labels
-          return Response.json({ error: "You don't have permission to view this user's labels" }, { status: 403 });
+          return Response.json({ error: "You don&apos;t have permission to view this user&apos;s labels" }, { status: 403 });
         }
       } else {
         // User is requesting their own labels

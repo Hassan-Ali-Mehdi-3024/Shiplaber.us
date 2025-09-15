@@ -88,7 +88,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
         if (response.status === 404) {
           toast({
             title: "Not found",
-            description: "This batch job doesn't exist or you don't have permission to view it",
+            description: "This batch job doesn&apos;t exist or you don&apos;t have permission to view it",
             variant: "destructive",
           });
           router.push("/dashboard/batch");
@@ -125,7 +125,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
     
     // Clean up interval
     return () => clearInterval(intervalId);
-  }, [params.id, batch?.status]);
+  }, [params.id, batch?.status, fetchBatch]);
 
   const handleRefresh = () => {
     fetchBatch();
@@ -193,7 +193,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
         <div className="p-6 bg-white rounded-lg shadow text-center">
           <XCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Batch Not Found</h2>
-          <p className="text-muted-foreground mb-6">This batch job doesn't exist or you don't have permission to view it</p>
+          <p className="text-muted-foreground mb-6">This batch job doesn&apos;t exist or you don&apos;t have permission to view it</p>
           <Button onClick={handleGoBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Batches

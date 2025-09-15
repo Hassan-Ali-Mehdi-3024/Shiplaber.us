@@ -166,7 +166,7 @@ export function OrderSummary({
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Insufficient Credits</AlertTitle>
             <AlertDescription>
-              You don't have enough credits to purchase this shipping label.
+              You don&apos;t have enough credits to purchase this shipping label.
               Please add more credits to your account.
             </AlertDescription>
           </Alert>

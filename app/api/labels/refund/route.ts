@@ -41,10 +41,10 @@ export async function POST(req: Request) {
         });
         
         if (!user || user.creatorId !== session.id) {
-          return Response.json({ error: "You don't have permission to refund this label" }, { status: 403 });
+          return Response.json({ error: "You don&apos;t have permission to refund this label" }, { status: 403 });
         }
       } else {
-        return Response.json({ error: "You don't have permission to refund this label" }, { status: 403 });
+        return Response.json({ error: "You don&apos;t have permission to refund this label" }, { status: 403 });
       }
     }
     

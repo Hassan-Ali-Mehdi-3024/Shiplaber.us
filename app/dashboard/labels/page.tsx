@@ -142,7 +142,7 @@ export default function ShipmentListPage() {
           ) : shipments.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">
-                You haven't created any shipping labels yet
+                You haven&apos;t created any shipping labels yet
               </p>
               <CustomButton href="/dashboard/labels/create">
                 <span className="flex items-center">

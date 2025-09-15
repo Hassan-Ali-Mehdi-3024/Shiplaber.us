@@ -39,11 +39,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         });
         
         if (!user || user.creatorId !== session.id) {
-          return Response.json({ error: "You don't have permission to view this shipment" }, { status: 403 });
+          return Response.json({ error: "You don&apos;t have permission to view this shipment" }, { status: 403 });
         }
       } else {
         // Regular users can only view their own shipments
-        return Response.json({ error: "You don't have permission to view this shipment" }, { status: 403 });
+        return Response.json({ error: "You don&apos;t have permission to view this shipment" }, { status: 403 });
       }
     }
     

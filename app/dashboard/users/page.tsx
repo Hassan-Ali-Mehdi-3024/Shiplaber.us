@@ -68,7 +68,7 @@ export default function UsersPage() {
   // Initial fetch on component mount
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   // Handle search
   const handleSearch = () => {
