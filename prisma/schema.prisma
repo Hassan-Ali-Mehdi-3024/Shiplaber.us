@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// For SQLite, we'll use strings instead of enums
+// User roles
+// SUPER_ADMIN, RESELLER, USER
+
+// Transaction types
+// CREDIT_ASSIGN: Admin/Reseller assigns credits
+// CREDIT_REVOKE: Admin/Reseller revokes credits
+// LABEL_PURCHASE: User purchases shipping label
+// LABEL_REFUND: Refund from cancelled label
+
+// Shipment status
+// PENDING, PURCHASED, REFUNDED, ERROR
+
+// Batch status
+// PROCESSING, COMPLETED, FAILED, CANCELLED
+
+// Users table
+model User {
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  passwordHash      String
+  role              String    // SUPER_ADMIN, RESELLER, USER
+  creditBalance     Float     @default(0.00)
+  emailNotifications Boolean   @default(true)
+  marketingEmails    Boolean   @default(false)
+  creatorId         String?   // Self-reference for hierarchy
+  creator           User?     @relation("UserCreator", fields: [creatorId], references: [id])
+  createdUsers      User[]    @relation("UserCreator")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  isActive          Boolean   @default(true)
+
+  // Relations
+  sentTransactions     Transaction[] @relation("SentTransactions")
+  receivedTransactions Transaction[] @relation("ReceivedTransactions")
+  shipments            Shipment[]
+  batches              Batch[]
+
+  @@index([creatorId])
+  @@index([role])
+  @@index([email])
+}
+
+// Transactions table
+model Transaction {
+  id            String    @id @default(uuid())
+  userId        String    // User who owns this transaction
+  user          User      @relation("ReceivedTransactions", fields: [userId], references: [id])
+  transactionType String  // CREDIT_ASSIGN, CREDIT_REVOKE, LABEL_PURCHASE, LABEL_REFUND
+  amount        Float
+  description   String?
+  referenceId   String?   // For shipment or batch references
+  createdById   String    // User who created this transaction
+  createdBy     User      @relation("SentTransactions", fields: [createdById], references: [id])
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([transactionType])
+}
+
+// Shipments table
+model Shipment {
+  id                 String         @id @default(uuid())
+  userId             String
+  user               User           @relation(fields: [userId], references: [id])
+  shippoTransactionId String?       @unique
+  shippoObjectId     String?
+  trackingNumber     String?
+  labelUrl           String?
+  cost               Float?
+  carrier            String?
+  serviceLevel       String?
+  fromAddress        String         // Stored as JSON string
+  toAddress          String         // Stored as JSON string
+  parcelDetails      String         // Stored as JSON string
+  status             String         @default("PENDING") // PENDING, PURCHASED, REFUNDED, ERROR
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([trackingNumber])
+}
+
+// Batches table (For CSV uploads)
+model Batch {
+  id             String      @id @default(uuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  filename       String?
+  totalRows      Int?
+  processedRows  Int         @default(0)
+  successfulRows Int         @default(0)
+  failedRows     Int         @default(0)
+  status         String      @default("PROCESSING") // PROCESSING, COMPLETED, FAILED, CANCELLED
+  errorLog       String?
+  createdAt      DateTime    @default(now())
+  completedAt    DateTime?
+
+  @@index([userId])
+  @@index([status])
+}
