@@ -1,8 +1,6 @@
 import * as runtime from '@prisma/client/runtime/library.js';
-import { PrismaClient } from '.prisma/client';
+import { prisma } from '../lib/prisma/index';
 import * as bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
 
 async function main() {
   try {

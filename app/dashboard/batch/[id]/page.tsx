@@ -111,7 +111,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
       setIsLoading(false);
       setRefreshing(false);
     }
-  }, [params.id, router, toast]);
+  }, [params.id, router]);
 
   useEffect(() => {
     fetchBatch();
