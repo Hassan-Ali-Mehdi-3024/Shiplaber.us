@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -93,7 +93,7 @@ export default function HistoryPage() {
   const [isFiltering, setIsFiltering] = useState(false);
   
   // Load transactions
-  const loadTransactions = async (page = currentPage) => {
+  const loadTransactions = useCallback(async (page = currentPage) => {
     setLoading(true);
     setError(null);
     
@@ -132,7 +132,7 @@ export default function HistoryPage() {
       setLoading(false);
       setIsFiltering(false);
     }
-  };
+  }, [currentPage, transactionType, startDate, endDate]);
   
   // Load transactions on initial render
   useEffect(() => {

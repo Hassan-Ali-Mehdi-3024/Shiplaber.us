@@ -61,7 +61,7 @@ export function ShippingRates({ rates, onSelect, onBack, isLoading = false }: Sh
       <Card>
         <CardHeader>
           <CardTitle>No Shipping Options Available</CardTitle>
-          <CardDescription>We couldn't find any shipping options for this route</CardDescription>
+          <CardDescription>We couldn&apos;t find any shipping options for this route</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-center py-6">

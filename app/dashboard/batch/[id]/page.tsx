@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchBatch = async () => {
+  const fetchBatch = useCallback(async () => {
     try {
       setRefreshing(true);
       const response = await fetch(`/api/labels/batch/${params.id}`);
@@ -111,7 +111,7 @@ export default function BatchDetailsPage({ params }: { params: { id: string } })
       setIsLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [params.id, router, toast]);
 
   useEffect(() => {
     fetchBatch();

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -37,7 +37,7 @@ export default function UsersPage() {
   const router = useRouter();
 
   // Fetch users data
-  const fetchUsers = async (page = 1, search = '') => {
+  const fetchUsers = useCallback(async (page = 1, search = '') => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -63,7 +63,7 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.limit]);
 
   // Initial fetch on component mount
   useEffect(() => {
