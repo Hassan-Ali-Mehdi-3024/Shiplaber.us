@@ -23,15 +23,26 @@ export async function POST(req: Request) {
       }, { status: 400 });
     }
     
+    console.log('Getting rates for:', {
+      from: data.fromAddress,
+      to: data.toAddress,
+      parcel: data.parcel
+    });
+    
     const rates = await getShippingRates(
       data.fromAddress,
       data.toAddress,
       data.parcel
     );
     
+    console.log('Received rates:', rates);
+    
+    // Ensure rates is always an array
+    const ratesArray = Array.isArray(rates) ? rates : [];
+    
     return Response.json({
       success: true,
-      rates
+      rates: ratesArray
     });
     
   } catch (error) {

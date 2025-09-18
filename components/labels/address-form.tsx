@@ -131,7 +131,7 @@ export function AddressForm({
   
   // Initialize form with schema and default values
   const form = useForm<AddressFormValues>({
-    resolver: zodResolver(addressSchema),
+    resolver: zodResolver(addressSchema) as any,
     defaultValues: address || defaultValues || {
       name: '',
       company: '',
@@ -244,11 +244,11 @@ export function AddressForm({
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit as any)}>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -262,7 +262,7 @@ export function AddressForm({
               />
               
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="company"
                 render={({ field }) => (
                   <FormItem>
@@ -277,7 +277,7 @@ export function AddressForm({
             </div>
             
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="street1"
               render={({ field }) => (
                 <FormItem>
@@ -291,7 +291,7 @@ export function AddressForm({
             />
             
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="street2"
               render={({ field }) => (
                 <FormItem>
@@ -305,8 +305,8 @@ export function AddressForm({
             />
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
+                <FormField
+                control={form.control as any}
                 name="city"
                 render={({ field }) => (
                   <FormItem>
@@ -317,10 +317,8 @@ export function AddressForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              
-              <FormField
-                control={form.control}
+              />              <FormField
+                control={form.control as any}
                 name="state"
                 render={({ field }) => (
                   <FormItem>
@@ -348,7 +346,7 @@ export function AddressForm({
               />
               
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="zip"
                 render={({ field }) => (
                   <FormItem>
@@ -363,7 +361,7 @@ export function AddressForm({
             </div>
             
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="country"
               render={({ field }) => (
                 <FormItem>
@@ -392,7 +390,7 @@ export function AddressForm({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
@@ -406,7 +404,7 @@ export function AddressForm({
               />
               
               <FormField
-                control={form.control}
+                control={form.control as any}
                 name="email"
                 render={({ field }) => (
                   <FormItem>

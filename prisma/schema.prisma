@@ -10,21 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// For SQLite, we'll use strings instead of enums
-// User roles
-// SUPER_ADMIN, RESELLER, USER
-
-// Transaction types
-// CREDIT_ASSIGN: Admin/Reseller assigns credits
-// CREDIT_REVOKE: Admin/Reseller revokes credits
-// LABEL_PURCHASE: User purchases shipping label
-// LABEL_REFUND: Refund from cancelled label
-
-// Shipment status
-// PENDING, PURCHASED, REFUNDED, ERROR
-
-// Batch status
-// PROCESSING, COMPLETED, FAILED, CANCELLED
+// User roles: SUPER_ADMIN, RESELLER, USER
+// Transaction types: CREDIT_ASSIGN, CREDIT_REVOKE, LABEL_PURCHASE, LABEL_REFUND
+// Shipment status: PENDING, PURCHASED, REFUNDED, ERROR
+// Batch status: PROCESSING, COMPLETED, FAILED, CANCELLED
 
 // Users table
 model User {

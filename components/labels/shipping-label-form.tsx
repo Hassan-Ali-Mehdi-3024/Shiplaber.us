@@ -57,9 +57,10 @@ type Step = 'addresses' | 'package' | 'rates' | 'summary';
 
 interface ShippingLabelFormProps {
   userCredits: number;
+  onSuccess?: () => void;
 }
 
-export function ShippingLabelForm({ userCredits }: ShippingLabelFormProps) {
+export function ShippingLabelForm({ userCredits, onSuccess }: ShippingLabelFormProps) {
   const router = useRouter();
   
   // Form state
@@ -196,8 +197,12 @@ export function ShippingLabelForm({ userCredits }: ShippingLabelFormProps) {
         throw new Error(data.error || 'Failed to purchase shipping label');
       }
       
-      // Redirect to the shipment details page
-      router.push(`/dashboard/labels/${data.shipment.id}`);
+      // Handle success
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push(`/dashboard/labels/${data.shipment.id}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to purchase label');
       setIsLoading(false);

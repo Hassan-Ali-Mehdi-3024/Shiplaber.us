@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getRoleBasedRoute } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,8 +31,10 @@ export default function LoginPage() {
         throw new Error(data.error || "Login failed");
       }
       
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect based on user role using utility function
+      const userRole = data.user?.role;
+      const redirectRoute = getRoleBasedRoute(userRole);
+      router.push(redirectRoute);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

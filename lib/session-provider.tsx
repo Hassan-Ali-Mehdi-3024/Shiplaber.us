@@ -5,7 +5,7 @@ interface SessionContextType {
     id: string;
     name: string;
     email: string;
-    role: 'SUPER_ADMIN' | 'RESELLER' | 'USER';
+    role: 'SUPER_ADMIN' | 'ADMIN' | 'RESELLER' | 'USER';
     creditBalance: number;
   } | null;
   status: 'loading' | 'authenticated' | 'unauthenticated';

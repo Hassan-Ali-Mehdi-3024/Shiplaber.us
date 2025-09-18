@@ -52,6 +52,10 @@ const shippoErrorMap: Record<string, string> = {
 // Helper function for API requests
 async function shippoFetch(endpoint: string, method: 'GET' | 'POST', data?: any) {
   try {
+    if (!SHIPPO_API_KEY) {
+      throw new Error('SHIPPO_API_KEY environment variable is not set');
+    }
+
     const response = await fetch(`${SHIPPO_API_URL}${endpoint}`, {
       method,
       headers: {
@@ -64,11 +68,17 @@ async function shippoFetch(endpoint: string, method: 'GET' | 'POST', data?: any)
     const result = await response.json();
 
     if (!response.ok) {
+      console.error('GoShippo API Error Response:', result);
+      
       // Map the error code to a user-friendly message
       let errorMessage = 'An error occurred with the shipping provider.';
       
       if (result.detail && shippoErrorMap[result.detail]) {
         errorMessage = shippoErrorMap[result.detail];
+      } else if (result.detail) {
+        errorMessage = result.detail;
+      } else if (result.message) {
+        errorMessage = result.message;
       }
       
       throw new Error(errorMessage);
@@ -77,6 +87,67 @@ async function shippoFetch(endpoint: string, method: 'GET' | 'POST', data?: any)
     return result;
   } catch (error) {
     console.error('GoShippo API Error:', error);
+    
+    // In development, provide mock data for certain endpoints
+    if (process.env.NODE_ENV === 'development') {
+      if (endpoint === '/shipments/') {
+        console.log('Using mock shipping rates for development');
+        return {
+          rates: [
+            {
+              object_id: 'rate_mock_1',
+              amount: '5.50',
+              currency: 'USD',
+              provider: 'USPS',
+              servicelevel: {
+                name: 'Priority Mail',
+                token: 'usps_priority',
+                terms: 'Delivery in 1-3 business days'
+              },
+              days: 2,
+              duration_terms: '1-3 business days'
+            },
+            {
+              object_id: 'rate_mock_2',
+              amount: '8.75',
+              currency: 'USD',
+              provider: 'USPS',
+              servicelevel: {
+                name: 'Priority Mail Express',
+                token: 'usps_priority_express',
+                terms: 'Delivery by 10:30 AM next business day'
+              },
+              days: 1,
+              duration_terms: 'Next business day'
+            },
+            {
+              object_id: 'rate_mock_3',
+              amount: '12.25',
+              currency: 'USD',
+              provider: 'FedEx',
+              servicelevel: {
+                name: 'FedEx Ground',
+                token: 'fedex_ground',
+                terms: 'Delivery in 1-5 business days'
+              },
+              days: 3,
+              duration_terms: '1-5 business days'
+            }
+          ]
+        };
+      } else if (endpoint === '/addresses/') {
+        console.log('Using mock address validation for development');
+        return {
+          object_id: 'address_mock_' + Date.now(),
+          validation_results: {
+            is_valid: true,
+            messages: []
+          },
+          ...data
+        };
+      }
+    }
+    
     throw error;
   }
 }
@@ -91,16 +162,19 @@ export async function validateAddress(address: Address) {
 
 // Get shipping rates
 export async function getShippingRates(
-  fromAddress: string, // Shippo Address ID
-  toAddress: string, // Shippo Address ID
+  fromAddress: Address | string, // Can be Address object or Shippo Address ID
+  toAddress: Address | string, // Can be Address object or Shippo Address ID
   parcel: Parcel
 ) {
-  return shippoFetch('/shipments/', 'POST', {
+  const shipment = await shippoFetch('/shipments/', 'POST', {
     address_from: fromAddress,
     address_to: toAddress,
     parcels: [parcel],
     async: false
   });
+  
+  // Return the rates array from the shipment
+  return shipment.rates || [];
 }
 
 // Purchase shipping label

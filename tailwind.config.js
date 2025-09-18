@@ -67,7 +67,13 @@ module.exports = {
   		},
   		fontFamily: {
   			sans: [
+  				'var(--font-inter)',
   				'Inter',
+  				'sans-serif'
+  			],
+  			display: [
+  				'var(--font-poppins)',
+  				'Poppins',
   				'sans-serif'
   			],
   			mono: [
